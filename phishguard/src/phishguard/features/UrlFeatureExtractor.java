@@ -25,7 +25,16 @@ public class UrlFeatureExtractor {
             List.of("login", "signin", "verify", "secure", "account", "update", "bank",
                     "claim", "prize", "confirm", "wallet", "free", "bonus", "suspend");
 
+    /** Features listed here are removed from every result (used by the ablation experiment). */
+    public static final Set<String> DISABLED = new HashSet<>();
+
     public Map<String, Double> extract(String rawUrl) {
+        Map<String, Double> f = extractAll(rawUrl);
+        if (!DISABLED.isEmpty()) f.keySet().removeAll(DISABLED);
+        return f;
+    }
+
+    private Map<String, Double> extractAll(String rawUrl) {
         Map<String, Double> f = new LinkedHashMap<>();
         String url = rawUrl == null ? "" : rawUrl.trim();
         String lower = url.toLowerCase();
@@ -101,7 +110,7 @@ public class UrlFeatureExtractor {
         String label = ip ? host : reg.substring(0, reg.indexOf('.') < 0 ? reg.length() : reg.indexOf('.'));
         f.put("domain_entropy", StringUtils.entropy(label));
 
-        // ---- New path/query features (added at the end so older results stay reproducible) ----
+        // Path/query features (added at the end so older results stay reproducible)
         addPathFeatures(f, lower);
         return f;
     }
