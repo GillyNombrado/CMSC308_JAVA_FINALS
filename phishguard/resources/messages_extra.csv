@@ -1,0 +1,43 @@
+# label|source|url|message      (label: 1 = scam, 0 = legitimate; source: SMS, DM, comment, post)
+# Challenge set: informal wording, misspellings, scams without the usual keywords, and legitimate messages that sound urgent.
+# Written by the AI assistant that also wrote the keyword lists, so it is NOT independent. Never open the scam links.
+1|SMS|g-cash-rewards.top/c|Hi! Bumalik na po ang GCash points mo, i-redeem na bago mawala: g-cash-rewards.top/c
+1|SMS|gcashh-help.xyz/otp|GCash: may pending refund ka na P1,499. I-confirm lang ang number at 6-digit code mo.
+1|DM|mayaa-wallet.top/cashin|Hello po, nagkamali ako ng send sa Maya mo ng P3,000. Pakibalik naman po, eto ang link para madali.
+1|SMS|bdo-secure-alert.xyz/v|BDO: Your online banking has been limited. Re-activate here to continue using your account.
+1|comment|bit.ly/ayuda-2026|Libreng ayuda po para sa mga Pilipino, mag-register lang dito, limited ang slot.
+1|post|jobs4u-ph.top/apply|Part-time online encoder, P800 per day, no experience needed. Pay the training fee P350 to start.
+1|SMS|lbc-parcel-track.click/fee|Your LBC parcel is waiting. Customs fee of P89 is required before delivery.
+1|DM|sh0pee-voucher.icu/get|Hi dear, you are selected for Shopee anniversary gift. Tap the link to receive your voucher.
+1|SMS|paypa1-support.xyz/restore|We limited your PayPal account. Restore access in 24 hours or it will be closed.
+1|DM|ph-lotto-winner.top/claim|Ikaw ang napili sa Lazada lucky draw! Kunin ang premyo mo ngayon, i-send lang ang full name at address.
+1|SMS|telco-promo-ph.buzz/load|Free 50GB data for you! Offer ends tonight. Register here.
+1|post|investph-profit.xyz/join|Invest P1,000 today, get P5,000 next week. Legit po, proof sa comments!
+1|SMS|gov-dole-benefit.xyz/form|DOLE: you qualified for the cash benefit program. Fill out the form and pay the P150 processing fee.
+1|DM|fb-security-check.top/appeal|Your Facebook page will be removed for copyright violation. Appeal now using this form.
+1|SMS|bpi-online-verify.click/login|BPI: Your online access expires today. Update your details here to avoid deactivation.
+1|comment|bit.ly/free-phone-ph|Giveaway! Libreng iPhone for 10 lucky followers, click mo lang ang link at mag-register.
+1|SMS|maya.ph.wallet-update.top/login|Maya reminder: complete your wallet verification today to keep your account active.
+1|DM|docs-review-ph.com/a8f3c1d2e9b74a60b5c1|Pls check this file po, urgent.
+1|SMS|netflix-billing-help.xyz/pay|Your Netflix payment failed. Update your card number now to avoid cancellation.
+1|post|sideincome-ph.top/start|Kumita ng P3,000 daily sa phone lang, walang puhunan, message mo ako.
+0|SMS|www.gcash.com|GCash: Your cash in of P500 was successful. Your new balance is P1,250.00.
+0|SMS|www.bdo.com.ph|BDO: Use code 774512 to verify your online transaction. Never share this code with anyone.
+0|SMS|www.shopee.ph|Shopee: Your voucher expires today! Use it on your next order in the app.
+0|SMS|www.lbcexpress.com|LBC: Your parcel is out for delivery today. Please prepare the exact amount for the COD.
+0|DM|www.up.edu.ph|Libreng tuition daw sa SUCs, check mo yung official announcement.
+0|post|www.dole.gov.ph|DOLE advisory: job seekers should never pay a fee to apply. Report illegal recruiters.
+0|comment|www.facebook.com|Congrats sa graduation, ang galing mo!
+0|DM|www.google.com|Eto yung link ng meeting natin, 3pm. Please join on time.
+0|SMS|www.globe.com.ph|Globe: Your bill of P999 is due on Nov 28. Pay through the GlobeOne app.
+0|SMS|www.meralco.com.ph|Meralco: Your bill for October is now available. Pay online to avoid late charges.
+0|post|www.pna.gov.ph|Typhoon update: classes suspended in Batangas and Laguna tomorrow.
+0|DM|www.lazada.com.ph|Sale na sa Lazada ngayon, 50 percent off sa phone cases, check mo.
+0|SMS|www.maya.ph|Maya: Your account was logged in from a new device. If this was you, ignore this message.
+0|comment|www.youtube.com|Ang ganda ng tutorial na to, salamat po!
+0|SMS|bit.ly/enroll-2026|Registrar: enrollment schedule for 2nd semester is posted, see the list here.
+0|post|www.bpi.com.ph|BPI reminder: we will never ask for your OTP through calls, texts, or links.
+0|DM|github.com|Push ko na yung code, check mo na lang yung branch.
+0|SMS|www.paypal.com|PayPal: A payment of $15.00 to Netflix was completed.
+0|comment|www.inquirer.net|Kawawa naman, sana makatulong ang gobyerno.
+0|SMS|www.smart.com.ph|Smart: Your load has expired. Reload today at smart.com.ph to keep your number active.

@@ -65,7 +65,7 @@ public class HybridEvalDemo {
         tree.train(train.urls, train.labels);
 
         PhishGuardEngine full = new PhishGuardEngine(tree, true, new RiskScorer());
-        PhishGuardEngine noBrand = new PhishGuardEngine(tree, true, new RiskScorer(0.5, 0.3, 0));
+        PhishGuardEngine noBrand = new PhishGuardEngine(tree, true, RiskScorer.noisyOr(0));
         final double T = 40;   // Medium or High counts as "scam"
 
         for (String f : files) {
@@ -82,11 +82,11 @@ public class HybridEvalDemo {
             List<String> errors = new ArrayList<>();
             line("Combined (full system)", run(rows, r -> full.analyze(r.url, r.message).score, T, errors));
 
-            System.out.println("\n--- E6: weight settings (URL / text / bonus). Tuned on this same data, so treat as exploratory ---");
-            double[][] w = {{0.5, 0.3, 20}, {0.4, 0.4, 20}, {0.6, 0.2, 20}, {0.3, 0.5, 20}};
-            for (double[] x : w) {
-                PhishGuardEngine e = new PhishGuardEngine(tree, true, new RiskScorer(x[0], x[1], x[2]));
-                line(String.format("%.1f / %.1f / +%.0f", x[0], x[1], x[2]), run(rows, r -> e.analyze(r.url, r.message).score, T, null));
+            System.out.println("\n--- E6: how the link score and message score are combined (exploratory, same data) ---");
+            RiskScorer[] rules = {new RiskScorer(), new RiskScorer(0.5, 0.3, 20), new RiskScorer(0.6, 0.2, 20), new RiskScorer(0.4, 0.4, 20)};
+            for (RiskScorer sc : rules) {
+                PhishGuardEngine e = new PhishGuardEngine(tree, true, sc);
+                line(sc.describe(), run(rows, r -> e.analyze(r.url, r.message).score, T, null));
             }
 
             System.out.println("\n--- E7: combined system by source type ---");
