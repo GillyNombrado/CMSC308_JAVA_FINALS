@@ -1,0 +1,59 @@
+# label|source|url|message      (label: 1 = scam, 0 = legitimate; source: SMS, DM, comment, post)
+# Lines starting with # are ignored. Do not use the | character inside a message.
+# WARNING: scam links below are made-up lookalikes. Never open them.
+1|SMS|gcash-verify-account.top/login|Your GCash account is locked due to unusual activity. Verify now to avoid permanent closure.
+1|SMS|gcash-promo.top/claim|CONGRATULATIONS!!! You won P50,000 from the GCash raffle! Claim now before it expires today!
+1|DM|maya-support-help.xyz/verify|Hi, this is Maya support. Your account is suspended. Send your OTP so we can restore it.
+1|SMS|bdo-online-update.click/signin|BDO ALERT: suspicious activity on your account. Confirm your identity within 24 hours.
+1|SMS|bit.ly/3xYz|Your parcel on hold due to unpaid shipping fee. Update your address here.
+1|SMS|lbc-redelivery.top/pay|LBC: failed delivery attempt. Pay the redelivery fee today to receive your package.
+1|DM|shopee-winner.icu/gift|Congrats! You won a free gift card from Shopee. Claim your prize now, limited slots only.
+1|comment|bit.ly/free-load-ph|Nanalo ka ng libreng load! I-click agad ang link para ma-claim ngayon na.
+1|post|earn-daily-ph.xyz/join|Hiring now! Work from home, earn daily. Walang puhunan. Send registration fee to start.
+1|DM|paypa1.com/secure|PayPal: we noticed unusual activity. Verify your account now or it will be suspended.
+1|SMS|gcash-verify.top/otp|Na-lock ang account mo sa GCash. Ibigay ang OTP para ma-verify agad.
+1|comment|lazada-sale.buzz/voucher|Free voucher for the first 100 users, claim now! Last chance, hurry!
+1|SMS|secure.paypal.com.account-update.xyz/signin|Dear customer, your PayPal account has been suspended. Sign in to confirm your identity immediately.
+1|DM|192.168.50.7/gcash/login|Hello po, kailangan mo i-update ang GCash account mo ngayon na. Pindutin lang ang link.
+1|post|bpi-reward.top/claim|Winner! BPI customers can get a free cash reward. Send your details to claim today only.
+1|SMS|www.shopee.ph|CONGRATULATIONS!!! You won a free gift card from Shopee! Claim now! Send your OTP to receive it.
+1|DM|maya.ph|Congrats! You won P10,000 from Maya. Send your OTP to claim now.
+1|SMS|secure-login-gcash-ph.top/a1b2|Please see your account update here.
+1|comment|account-verify-bdo.xyz/login|Check this out po
+1|SMS|docs-share-view.com/V4/validation/a111aedc8ae390eabcfa130e041a10a4|Please review the attached document at your convenience.
+1|DM|zxqwvkrt-portal.top/login?id=88231|Hi, here is the link we talked about.
+1|SMS|gov-ayuda-ph.xyz/register|Ayuda ng gobyerno: magpadala ng registration fee na P200 para makuha ang cash assistance.
+1|post|crypto-double.top/start|Double your money in 7 days, guaranteed profit! Send money now.
+1|SMS|gcash.com.verify-now.top/login|Your GCash wallet will be closed. Verify now.
+1|SMS|bit.ly/gcash-bonus|Libreng GCash bonus! Mag-click ngayon na, last chance!
+1|post|metrobank-secure-login.click/verify|Metrobank notice: your card number and PIN must be confirmed immediately.
+0|SMS|www.bdo.com.ph|Hi, your BDO statement for October is ready. Log in at bdo.com.ph to view it.
+0|SMS|www.gcash.com|Your OTP is 482913. Do not share this code with anyone. - GCash
+0|SMS|www.lbcexpress.com|LBC: your package has been delivered. Thank you for choosing LBC.
+0|SMS|www.shopee.ph|Your Shopee order is out for delivery and will arrive today.
+0|SMS|www.maya.ph|Maya: you received P500 from Juan. Check your balance in the app.
+0|DM|www.wikipedia.org|Kumusta! Eto yung link para sa research natin sa history.
+0|DM|www.youtube.com/watch?v=dQw4w9WgXcQ|Pre, watch mo to, ang ganda ng lecture.
+0|comment|www.dost.gov.ph|Thanks for sharing! The scholarship details are on the DOST website.
+0|post|www.up.edu.ph|Enrollment for next semester opens Monday. Check the official UP page for the schedule.
+0|SMS|www.bpi.com.ph|BPI: Never share your PIN or password with anyone. We will never ask for them.
+0|DM|github.com/torvalds/linux|Here is the repo I mentioned for our CS project.
+0|comment|www.rappler.com|Good article, read it here.
+0|post|www.inquirer.net|Weather update: expect heavy rain tomorrow in Calabarzon. Stay safe, everyone.
+0|SMS|www.gcash.com|GCash: you paid P120 to Meralco. Reference no. 5521883.
+0|DM|docs.google.com/document|Eto yung notes natin para sa exam, i-edit mo lang kung may kulang.
+0|SMS|www.paypal.com|PayPal: you sent $20.00 to Maria. Do not share your password with anyone.
+0|comment|www.lazada.com.ph|Nice! I bought mine from the official Lazada store.
+0|post|www.philhealth.gov.ph|PhilHealth reminder: update your contribution records at the official website.
+0|SMS|www.bdo.com.ph|BDO: your card ending 1234 was used at SM Calamba for P1,250.00. If this was not you, call the number at the back of your card.
+0|DM|www.google.com/maps|Meet tayo dito bukas ng 3pm.
+0|comment|www.facebook.com|Join our class group here po.
+0|SMS|www.mercurydrug.com|Your prescription is ready for pick up.
+0|comment|www.rappler.com|Nag-GCash ako kanina pero ang bagal ng app, anyone else?
+0|DM|www.shopee.ph|Pre, 20 percent off daw sa Shopee, check mo.
+0|SMS|bit.ly/class-sched|Prof: class schedule is posted, see the link.
+0|post|www.deped.gov.ph|DepEd reminder: report scams through official channels only.
+0|SMS|www.globe.com.ph|Globe: your promo GoSURF50 is now active. Valid for 7 days.
+0|SMS|www.smart.com.ph|Smart: you have 2GB left. Reload anytime at smart.com.ph.
+0|DM|www.canva.com|Gawa ko yung poster sa Canva, tingnan mo.
+0|comment|www.imdb.com|Best movie of the year for me.

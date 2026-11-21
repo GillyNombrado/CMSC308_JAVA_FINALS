@@ -6,6 +6,11 @@ import java.util.*;
 public class RiskScorer {
     private final double wUrl, wText, maxBonus;
 
+    /** A message at or above this text risk is a strong scam signal on its own. */
+    private static final double STRONG_TEXT = 60;
+    /** A strong scam message can never score below this share of its own text risk. */
+    private static final double TEXT_FLOOR_SHARE = 0.8;
+
     /** Starting weights from the project plan: 50% URL, 30% text, up to +20 for the brand cross-check. */
     public RiskScorer() { this(0.5, 0.3, 20); }
 
@@ -15,9 +20,7 @@ public class RiskScorer {
         this.maxBonus = maxBonus;
     }
 
-    /**
-     * @param text may be null when no message was given
-     */
+    /** @param text may be null when no message was given */
     public RiskResult score(double urlRisk, String urlSource, List<String> urlReasons,
                             TextResult text, BrandCheck brand) {
         boolean hasText = text != null;
@@ -29,9 +32,19 @@ public class RiskScorer {
         if (brand.status == BrandCheck.Status.MISMATCH) bonus = maxBonus;
         else if (brand.status == BrandCheck.Status.UNVERIFIABLE) bonus = maxBonus / 2;
 
-        double finalScore = Math.max(0, Math.min(100, base + bonus));
+        double finalScore = base + bonus;
+
+        // Floor: a clean link must not hide a message that is clearly a scam
+        boolean floorApplied = false;
+        if (hasText && text.score >= STRONG_TEXT) {
+            double floor = TEXT_FLOOR_SHARE * text.score;
+            if (floor > finalScore) { finalScore = floor; floorApplied = true; }
+        }
+        finalScore = Math.max(0, Math.min(100, finalScore));
 
         List<String> reasons = new ArrayList<>();
+        if (floorApplied)
+            reasons.add("The message alone is a strong scam signal, so the link's safe appearance does not lower the score");
         if (brand.status != BrandCheck.Status.NONE) {
             String suffix = bonus > 0 ? " (+" + (int) bonus + ")" : "";
             reasons.add("Cross-check: " + brand.reason + suffix);
