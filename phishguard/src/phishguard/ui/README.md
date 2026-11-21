@@ -4,7 +4,7 @@ Plain HTML + JavaScript front end. No build step: open `index.html`.
 Each HTML file is a small shell (`<div id="app">`); JavaScript renders the page.
 
 ```
-phishing-classifier/
+ui/
 ├── index.html / url-checker.html / message-checker.html / about.html
 ├── css/styles.css
 └── js/
