@@ -58,6 +58,7 @@ public class UrlFeatureExtractor {
             for (String k : List.of("host_length", "is_ip", "is_https", "has_port", "subdomain_count",
                     "suspicious_words", "brand_mismatch", "lookalike", "risky_tld", "is_shortener", "domain_entropy"))
                 f.put(k, 0.0);
+            addPathFeatures(f, lower);
             return f;
         }
         host = host.toLowerCase();
@@ -99,6 +100,66 @@ public class UrlFeatureExtractor {
 
         String label = ip ? host : reg.substring(0, reg.indexOf('.') < 0 ? reg.length() : reg.indexOf('.'));
         f.put("domain_entropy", StringUtils.entropy(label));
+
+        // ---- New path/query features (added at the end so older results stay reproducible) ----
+        addPathFeatures(f, lower);
         return f;
+    }
+
+    /** Features that describe the path and query. Works on the raw lowercase text, so it never fails. */
+    private void addPathFeatures(Map<String, Double> f, String lower) {
+        String s = lower.replaceFirst("^[a-z][a-z0-9+.-]*://", "");
+        int hash = s.indexOf('#');
+        if (hash >= 0) s = s.substring(0, hash);
+
+        int cut = s.length();
+        for (char c : new char[]{'/', '?'}) {
+            int i = s.indexOf(c);
+            if (i >= 0 && i < cut) cut = i;
+        }
+        String hostPart = s.substring(0, cut);
+        String rest = s.substring(cut);                       // path + query
+        int q = rest.indexOf('?');
+        String pathPart = q >= 0 ? rest.substring(0, q) : rest;
+        String query = q >= 0 ? rest.substring(q + 1) : "";
+
+        // Path segments and file extension
+        int segments = 0;
+        String lastSegment = "";
+        for (String seg : pathPart.split("/")) {
+            if (!seg.isEmpty()) { segments++; lastSegment = seg; }
+        }
+        int params = query.isEmpty() ? 0 : query.split("&").length;
+
+        // Longest run of letters/digits
+        int longest = 0, run = 0;
+        for (char c : lower.toCharArray()) {
+            if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) { run++; longest = Math.max(longest, run); }
+            else run = 0;
+        }
+
+        // Hex-like blob: a token of 16+ hex characters in the path or query
+        boolean hexBlob = false;
+        for (String t : rest.split("[^a-z0-9]+"))
+            if (t.length() >= 16 && t.matches("[0-9a-f]+")) hexBlob = true;
+
+        // Suspicious words: where do they appear?
+        int wordsHost = 0, wordsPath = 0;
+        for (String w : SUSPICIOUS_WORDS) {
+            if (hostPart.contains(w)) wordsHost++;
+            if (rest.contains(w)) wordsPath++;
+        }
+
+        long digits = lower.chars().filter(Character::isDigit).count();
+
+        f.put("path_segments", (double) segments);
+        f.put("query_params", (double) params);
+        f.put("digit_ratio", lower.isEmpty() ? 0.0 : (double) digits / lower.length());
+        f.put("longest_token", (double) longest);
+        f.put("has_hex_blob", hexBlob ? 1.0 : 0.0);
+        f.put("ext_php", lastSegment.endsWith(".php") ? 1.0 : 0.0);
+        f.put("ext_html", (lastSegment.endsWith(".html") || lastSegment.endsWith(".htm")) ? 1.0 : 0.0);
+        f.put("words_in_host", (double) wordsHost);
+        f.put("words_in_path", (double) wordsPath);
     }
 }
