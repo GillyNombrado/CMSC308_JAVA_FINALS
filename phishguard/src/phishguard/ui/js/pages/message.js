@@ -1,4 +1,4 @@
-/* Page: Message Checker */
+/* Page: Message Checker (sends the message, and any link inside it, to the Java server) */
 mountPage('message-checker.html', 'Message Checker', `<div class="wrap">
  <div class="page-head">
   <h1>Message Checker</h1>
@@ -34,7 +34,7 @@ $('mclear').onclick = () => {
   min.classList.remove('err'); $('mcount').textContent = '0 / 2000 characters'; min.focus();
 };
 
-$('mgo').onclick = () => {
+$('mgo').onclick = async () => {
   const v = min.value.trim(), e = $('merr');
   e.textContent = ''; $('mres').innerHTML = '';
   if (v.length < 10) {
@@ -42,5 +42,12 @@ $('mgo').onclick = () => {
     min.classList.add('err'); return;
   }
   busy($('mgo'), true);
-  setTimeout(() => { render(analyzeMsg(v), $('mres')); busy($('mgo'), false, 'Analyze Message'); }, 1400);
+  try {
+    // If the message contains a link, the server checks the link and the wording together
+    render(await analyzeRemote('msg', extractLink(v), v), $('mres'));
+  } catch (err) {
+    e.textContent = err.message; min.classList.add('err');
+  } finally {
+    busy($('mgo'), false, 'Analyze Message');
+  }
 };

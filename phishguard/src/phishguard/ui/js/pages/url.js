@@ -1,8 +1,8 @@
-/* Page: URL Checker */
+/* Page: URL Checker (sends the link, and an optional message, to the Java server) */
 mountPage('url-checker.html', 'URL Checker', `<div class="wrap">
  <div class="page-head">
   <h1>URL Checker</h1>
-  <p>Paste a suspicious link to see whether the website looks like phishing.</p>
+  <p>Paste a suspicious link. If it came with a message, paste that too for a more accurate result.</p>
  </div>
 </div>
 <section class="tool">
@@ -15,6 +15,7 @@ mountPage('url-checker.html', 'URL Checker', `<div class="wrap">
     <button class="btn ghost" id="uclear" type="button">Clear</button>
     <button class="btn primary" id="ugo" type="button">Check URL</button>
    </div>
+   <textarea id="umsg" maxlength="2000" style="min-height:90px;margin-top:12px" placeholder="Optional: paste the message that came with the link (SMS, DM, comment...)" aria-label="Message that came with the link (optional)"></textarea>
    <div class="msg-err" id="uerr" role="alert"></div>
    <div id="ures"></div>
   </div>
@@ -22,7 +23,7 @@ mountPage('url-checker.html', 'URL Checker', `<div class="wrap">
 </section>`);
 
 /* Wiring for url-checker.html */
-const uin = $('uin');
+const uin = $('uin'), umsg = $('umsg');
 
 $('upaste').onclick = async () => {
   try { uin.value = await navigator.clipboard.readText(); uin.focus(); }
@@ -30,19 +31,23 @@ $('upaste').onclick = async () => {
 };
 
 $('uclear').onclick = () => {
-  uin.value = ''; $('ures').innerHTML = ''; $('uerr').textContent = '';
+  uin.value = ''; umsg.value = ''; $('ures').innerHTML = ''; $('uerr').textContent = '';
   $('ufield').classList.remove('err'); uin.focus();
 };
 
-function checkUrl() {
+async function checkUrl() {
   const v = uin.value.trim(), f = $('ufield'), e = $('uerr');
   e.textContent = ''; f.classList.remove('err'); $('ures').innerHTML = '';
   if (!v) { e.textContent = 'Enter a link to check.'; f.classList.add('err'); return; }
   if (/\s/.test(v) || v.length > 2048) { e.textContent = 'That doesn’t look like a single link. Remove spaces and try again.'; f.classList.add('err'); return; }
-  const r = analyzeUrl(v);
-  if (!r) { e.textContent = 'We couldn’t read that as a link. Try something like example.com/page.'; f.classList.add('err'); return; }
   busy($('ugo'), true);
-  setTimeout(() => { render(r, $('ures')); busy($('ugo'), false, 'Check URL'); }, 1200);
+  try {
+    render(await analyzeRemote('url', v, umsg.value.trim()), $('ures'));
+  } catch (err) {
+    e.textContent = err.message; f.classList.add('err');
+  } finally {
+    busy($('ugo'), false, 'Check URL');
+  }
 }
 
 $('ugo').onclick = checkUrl;

@@ -28,7 +28,7 @@ function footerHtml() {
    <div><h5>Explore</h5><a href="index.html">Home</a><a href="url-checker.html">URL Checker</a><a href="message-checker.html">Message Checker</a><a href="about.html">About Us</a></div>
    <div><h5>Legal</h5><a href="#privacy">Privacy Notice</a><a href="#disclaimer">Disclaimer</a></div>
   </div>
-  <div class="disc"><p id="privacy" style="margin:0 0 8px"><b>Privacy Notice:</b> Content you enter is analyzed in your browser and is not stored or sent anywhere.</p><p id="disclaimer" style="margin:0"><b>Disclaimer:</b> This tool is designed to assist in identifying potential online threats. Scan results are not a guarantee that a website or message is safe.</p></div>
+  <div class="disc"><p id="privacy" style="margin:0 0 8px"><b>Privacy Notice:</b> Content you enter is sent only to the PhishGuard program running on this computer, is used to produce your result, and is not stored. Never open links you are testing.</p><p id="disclaimer" style="margin:0"><b>Disclaimer:</b> This tool is designed to assist in identifying potential online threats. Scan results are not a guarantee that a website or message is safe.</p></div>
  </div>
 </footer>`;
 }

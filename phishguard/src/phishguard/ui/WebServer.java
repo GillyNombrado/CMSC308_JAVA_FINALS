@@ -20,7 +20,14 @@ import java.util.concurrent.Executors;
 public class WebServer {
 
     private static final int PORT = 8080;
-    private static final Path WEB_DIR = Paths.get("web").toAbsolutePath().normalize();
+    private static final Path WEB_DIR = findWebDir();
+
+    /** Uses a "web" folder if you have one, otherwise the ui folder inside src. */
+    private static Path findWebDir() {
+        Path web = Paths.get("web");
+        Path ui = Paths.get("src", "phishguard", "ui");
+        return (Files.isDirectory(web) ? web : ui).toAbsolutePath().normalize();
+    }
     private static final int MAX_BODY = 20_000;
 
     public static void main(String[] args) throws Exception {
@@ -53,13 +60,17 @@ public class WebServer {
             Map<String, String> in = parseFlatJson(body);
             String url = in.get("url");
             String message = in.get("message");
-            if (url == null || url.trim().isEmpty()) {
-                sendJson(ex, 400, "{\"error\":\"url is required\"}");
+            boolean noUrl = url == null || url.trim().isEmpty();
+            boolean noMsg = message == null || message.trim().isEmpty();
+            if (noUrl && noMsg) {
+                sendJson(ex, 400, "{\"error\":\"Enter a link, a message, or both.\"}");
                 return;
             }
 
-            RiskResult r = engine.analyze(url, message);
+            RiskResult r = noUrl ? engine.analyzeMessageOnly(message) : engine.analyze(url, message);
             sendJson(ex, 200, toJson(r));
+        } catch (IllegalArgumentException e) {
+            sendJson(ex, 400, "{\"error\":" + q(e.getMessage()) + "}");
         } catch (Exception e) {
             e.printStackTrace();
             sendJson(ex, 500, "{\"error\":\"Server error\"}");
@@ -71,7 +82,7 @@ public class WebServer {
         sb.append("{");
         sb.append("\"score\":").append(Math.round(r.score)).append(",");
         sb.append("\"level\":").append(q(r.level())).append(",");
-        sb.append("\"urlScore\":").append(Math.round(r.urlScore)).append(",");
+        sb.append("\"urlScore\":").append(r.urlScore < 0 ? "null" : String.valueOf(Math.round(r.urlScore))).append(",");
         sb.append("\"textScore\":").append(r.hasMessage ? String.valueOf(Math.round(r.textScore)) : "null").append(",");
         sb.append("\"hasMessage\":").append(r.hasMessage).append(",");
         sb.append("\"brandStatus\":").append(q(r.brand.status.name())).append(",");
@@ -95,7 +106,7 @@ public class WebServer {
             if (p.equals("/")) p = "/index.html";
             Path file = WEB_DIR.resolve(p.substring(1)).normalize();
             // Block path traversal such as /../secret
-            if (!file.startsWith(WEB_DIR) || !Files.isRegularFile(file)) {
+            if (!file.startsWith(WEB_DIR) || !Files.isRegularFile(file) || contentType(file.toString()) == null) {
                 send(ex, 404, "text/plain; charset=utf-8", "Not found".getBytes(StandardCharsets.UTF_8));
                 return;
             }
@@ -116,7 +127,7 @@ public class WebServer {
         if (n.endsWith(".png"))  return "image/png";
         if (n.endsWith(".jpg") || n.endsWith(".jpeg")) return "image/jpeg";
         if (n.endsWith(".ico"))  return "image/x-icon";
-        return "application/octet-stream";
+        return null;   // unknown types (such as .java source files) are never served
     }
 
     // ---------- Helpers ----------

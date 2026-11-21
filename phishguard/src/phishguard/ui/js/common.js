@@ -24,18 +24,23 @@ const COPY = {
 
 function render(r, el) {
   const [ico, title, desc, label] = COPY[r.type][r.level];
-  const lv = r.score >= 55 ? 'High' : r.score >= 25 ? 'Medium' : 'Low';
-  const shown = r.type === 'url' ? r.input : (r.input.length > 160 ? r.input.slice(0, 160) + '…' : r.input);
+  const shown = r.input.length > 160 ? r.input.slice(0, 160) + '…' : r.input;
+  // Lines produced by the learned model are technical (feature names), so they go in a collapsible section
+  const tech  = r.why.filter(w => w.indexOf('URL (learned model)') === 0).map(w => w.replace('URL (learned model): ', ''));
+  const plain = r.why.filter(w => w.indexOf('URL (learned model)') !== 0);
+  const part  = v => (v === null || v === undefined) ? 'n/a' : v;
   el.innerHTML = `<div class="result ${r.level}" role="status">
   <div class="rhead"><div class="ico">${ico}</div><div><h3>${title}</h3><p>${desc}</p></div></div>
   <div class="url">${esc(shown)}</div>
   <div class="stats">
    <div class="stat"><span>Status</span><b>${label}</b></div>
-   <div class="stat"><span>Risk level: ${lv}</span><b>${r.score}%</b><div class="meter"><i id="mt"></i></div></div>
-   <div class="stat"><span>Confidence</span><b>${r.conf}%</b></div>
+   <div class="stat"><span>Risk level: ${esc(r.levelName)}</span><b>${r.score}%</b><div class="meter"><i id="mt"></i></div></div>
+   <div class="stat"><span>Link risk / Message risk</span><b>${part(r.urlScore)} / ${part(r.textScore)}</b></div>
   </div>
   <h4>Why we think so</h4>
-  <ul>${r.why.map(w => '<li>' + esc(w) + '</li>').join('')}</ul>
+  <ul>${plain.map(w => '<li>' + esc(w) + '</li>').join('')}</ul>
+  ${tech.length ? '<details><summary>Technical details</summary><ul>' + tech.map(w => '<li>' + esc(w) + '</li>').join('') + '</ul></details>' : ''}
+  <p><b>What to do:</b> ${esc(r.advice || '')}</p>
   <div class="time">Scanned ${ts()}${r.level === 'safe' ? ' · A low score does not guarantee safety. Stay cautious.' : ''}</div></div>`;
   requestAnimationFrame(() => requestAnimationFrame(() => {
     const m = el.querySelector('#mt');

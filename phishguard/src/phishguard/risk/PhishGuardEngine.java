@@ -32,9 +32,24 @@ public class PhishGuardEngine {
         return new PhishGuardEngine(tree, true, new RiskScorer());
     }
 
-    /** @param message optional; pass null or blank to analyze the URL alone */
+    /** True when the input looks like a link: no spaces, and a host that is a domain name or an IP address. */
+    public static boolean isReadableUrl(String url) {
+        if (url == null) return false;
+        String u = url.trim();
+        if (u.isEmpty() || u.length() > 2048 || u.matches(".*\\s.*")) return false;
+        String host = BrandChecker.hostOf(u);
+        if (host == null || !host.contains(".")) return false;
+        return host.matches("[a-z0-9.-]+") && !host.startsWith(".") && !host.endsWith(".") && !host.contains("..");
+    }
+
+    /**
+     * @param message optional; pass null or blank to analyze the URL alone
+     * @throws IllegalArgumentException when the input cannot be read as a link
+     */
     public RiskResult analyze(String url, String message) {
-        String cleanUrl = url == null ? "" : url.trim();
+        if (!isReadableUrl(url))
+            throw new IllegalArgumentException("That does not look like a link. Try something like example.com/page");
+        String cleanUrl = url.trim();
 
         // The tree was trained on normalized URLs, so normalize before using it
         ClassifierResult chosen = urlModel.classify(extractor.extract(DatasetLoader.normalize(cleanUrl)));
@@ -49,5 +64,16 @@ public class PhishGuardEngine {
         TextResult text = (message == null || message.isBlank()) ? null : textAnalyzer.analyze(message);
         BrandCheck brand = brandChecker.check(text == null ? Set.of() : text.brands, cleanUrl);
         return scorer.score(chosen.score, source, chosen.reasons, text, brand);
+    }
+
+    /** Analyzes wording only, for a message that contains no link. */
+    public RiskResult analyzeMessageOnly(String message) {
+        if (message == null || message.trim().length() < 10)
+            throw new IllegalArgumentException("Add a bit more text. Messages need at least 10 characters.");
+        TextResult t = textAnalyzer.analyze(message);
+        List<String> reasons = new ArrayList<>();
+        for (String r : t.reasons) reasons.add("Message: " + r);
+        reasons.add("No link was found, so only the wording of the message was checked");
+        return new RiskResult(t.score, -1, t.score, true, BrandCheck.none(), reasons);
     }
 }
