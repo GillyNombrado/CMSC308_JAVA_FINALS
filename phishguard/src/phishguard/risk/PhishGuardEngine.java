@@ -61,6 +61,14 @@ public class PhishGuardEngine {
             if (r.score > chosen.score) { chosen = r; source = "rules"; }
         }
 
+        // Well-known official domains get a low link risk (see SafeDomains for the safety rules)
+        if (SafeDomains.isTrustedUrl(cleanUrl)) {
+            double capped = Math.min(chosen.score, 5);
+            chosen = new ClassifierResult(capped, List.of("The link goes to a well-known official domain ("
+                    + SafeDomains.registeredDomainOf(cleanUrl) + ")"));
+            source = "trusted list";
+        }
+
         TextResult text = (message == null || message.isBlank()) ? null : textAnalyzer.analyze(message);
         BrandCheck brand = brandChecker.check(text == null ? Set.of() : text.brands, cleanUrl);
         return scorer.score(chosen.score, source, chosen.reasons, text, brand);
